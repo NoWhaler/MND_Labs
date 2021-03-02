@@ -24,14 +24,9 @@ xn3 = [(x3[i] - x03) / dx3 for i in range(8)]
 
 Yet = a0 + a1*x01 + a2*x02 + a3*x03
 
-res = 0
-for i in range(8):
-    res = Y[i] + res
-avg_Y = res/8
-
 k = 100
 for i in range(8):
-    if Y[i] > avg_Y and Y[i] < k:
+    if Y[i] > Yet and Y[i] < k:
         k = Y[i]
 
 print("a0= %s a1= %s a2= %s a3= %s" % (a0, a1, a2, a3))
@@ -49,5 +44,4 @@ print("Xn1: %s" % xn1)
 print("Xn2: %s" % xn2)
 print("Xn3: %s" % xn3)
 print("Yэт: %s" % Yet)
-print("Yavg: %s" % avg_Y)
-print("Y<-: %s" % k)
+print("Yэт<-: %s" % k)
