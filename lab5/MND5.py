@@ -1,4 +1,5 @@
 import random
+import time
 import numpy as np
 import sklearn.linear_model as lm
 from scipy.stats import f, t
@@ -191,12 +192,12 @@ def check(X, Y, B, n, m):
     final_k = [B[i] for i in range(len(ts)) if ts[i] in res]
     print('\nКоефіцієнти {} статистично незначущі, тому ми виключаємо їх з рівняння.'.format(
         [round(i, 3) for i in B if i not in final_k]))
-
+    start_time_coefficients = time.perf_counter()
     y_new = []
     for j in range(n):
         y_new.append(regression([X[j][i] for i in range(len(ts)) if ts[i] in res], final_k))
-
     print(f'\nЗначення "y" з коефіцієнтами {final_k}')
+    print(f"Час пошуку значимих коефіцієнтів: {time.perf_counter() - start_time_coefficients}")
     print(y_new)
 
     d = len(res)
