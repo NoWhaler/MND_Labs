@@ -1,4 +1,7 @@
 from math import fabs, sqrt
+from time import time
+
+tms = []
 
 m = 3
 p = 0.95
@@ -115,6 +118,7 @@ def student_test(b_lst, number_x=10):
 
 
 def fisher_test():
+
     dispersion_ad = 0
     f4 = N - d
     for row in range(len(average_y)):
@@ -211,7 +215,10 @@ while not adequate:
         q = 1 - p
         Gp = max(dispersion_y) / sum(dispersion_y)
         print("Критерій Кохрена:")
+        tm = time()
         Gt = Tests.get_cohran_value(f2, f1, q)
+        tms.append(time() - tm)
+
         if Gt > Gp:
             print("Дисперсія однорідна при рівні значимості {:.2f}.".format(q))
             homogeneous = True
@@ -220,7 +227,10 @@ while not adequate:
             m += 1
 
     dispersion_b2 = sum(dispersion_y) / (N * N * m)
+    tm = time()
     student_lst = list(student_test(beta))
+    tms.append(time() - tm)
+
     print("Отримане рівняння регресії з урахуванням критерія Стьюдента")
     print("{:.3f} + {:.3f} * X1 + {:.3f} * X2 + {:.3f} * X3 + {:.3f} * Х1X2 + {:.3f} * Х1X3 + {:.3f} * Х2X3"
           "+ {:.3f} * Х1Х2X3 + {:.3f} * X11^2 + {:.3f} * X22^2 + {:.3f} * X33^2 = ŷ\n\tПеревірка"
@@ -231,8 +241,13 @@ while not adequate:
 
     print("Критерій Фішера")
     d = 11 - student_lst.count(0)
+    tm = time()
     if fisher_test():
         print("Рівняння регресії адекватне  оригіналу")
         adequate = True
     else:
         print("Рівняння регресії неадекватне  оригіналу\n\t Проводимо експеримент повторно")
+    tms.append(time() - tm)
+
+    print('#' * 40)
+    print('Час статичних перевірок: {:.10f}c. {:.10f}c. {:.10f}c.'.format(*tms))
