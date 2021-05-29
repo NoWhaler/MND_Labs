@@ -2,11 +2,12 @@ import random
 import numpy as np
 from numpy.linalg import solve
 from scipy.stats import f, t
+import time
 
 N = 8
-x1_min, x1_max, x2_min, x2_max, x3_min, x3_max = [-30, 0, 10, 60, 10, 35]
-avg_x_min = (x1_min + x2_min + x3_min)/3
-avg_x_max = (x1_max + x2_max + x3_max)/3
+x_range = np.array([(-30, 0), (10, 60), (10, 35)])
+avg_x_min = (-30 + 10 + 10)/3
+avg_x_max = (0 + 60 + 35)/3
 y_min = round(200 + avg_x_min)
 y_max = round(200 + avg_x_max)
 
@@ -121,6 +122,16 @@ for i in range(N):
 
 print("Значущі коефіцієнти регресії:", coefficient_1)
 print("Незначущі коефіцієнти регресії:", coefficient_2)
+
+endings = ['x1', 'x2', 'x3', 'x1x2', 'x1x3', 'x2x3', 'x1x2x3']
+answer = ''
+for i in range(len(bi)):
+    if bi[i] in coefficient_2:
+        answer += f'{bi[i]}{endings[i-1]} +'
+answer = answer[0: len(answer)-2]
+print('Рівняння із незначимих коефіцієнтів')
+print(answer)
+
 y_st = []
 for i in range(N):
     y_st.append(res[0] + res[1] * xn[1][i] + res[2] * xn[2][i] + res[3] * xn[3][i] + res[4] * x1x2_norm[i]\
