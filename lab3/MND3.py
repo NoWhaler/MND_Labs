@@ -3,10 +3,11 @@ import numpy as np
 from numpy.linalg import solve
 from scipy.stats import f, t
 from functools import partial
+import time
 
+x_range = np.array([(-20, 15), (-30, 45), (-30, -15)])
 
 def plan_matrix(n, m):
-    x_range = [(-20, 15), (-30, 45), (-30, -15)]
     avg_x_min = (-20 - 30 - 30) / 3
     avg_x_max = (15 + 45 - 15) / 3
     y_max = round(200 + avg_x_max)
@@ -116,6 +117,7 @@ def cochran(f1, f2, q=0.05):
 
 
 def main(n, m):
+    global x_range
     f1 = m - 1
     f2 = n
     f3 = f1 * f2
@@ -154,19 +156,21 @@ def main(n, m):
     d = len(res)
     f4 = n - d
     Fp = fisher_test(y, y_average, y_new, n, m, d)
-
+    start_time = time.time()
     fisher = partial(f.ppf, q=1 - 0.05)
     Ft = fisher(dfn=f4, dfd=f3)
 
     print('\nПеревірка адекватності за критерієм Фішера')
     print('Fp =', Fp)
     print('F_t =', Ft)
+    iteration = (time.time() - start_time)*1000
     if Fp < Ft:
         print('Математична модель адекватна експериментальним даним')
     else:
         print('Математична модель не адекватна експериментальним даним')
+        print(x_range / iteration)
 
 
 if __name__ == '__main__':
-    main(6, 7)
+    main(4, 6)
 
